@@ -1,0 +1,19 @@
+DFS
+change color on visited
+show current node
+forward and backwards button
+play button
+text to graph (D3 create graph with UI)
+arrows on edges
+
+Maybe:
+ask questions (visualize mode and quiz mode)
+
+meet every 2 weeks
+
+
+BFS
+djikstrika
+topological sort
+
+dropdown to switch b/w algos
