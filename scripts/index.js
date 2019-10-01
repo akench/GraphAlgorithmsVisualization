@@ -20,9 +20,7 @@ function renderGraph() {
         .attr("width", width)
         .attr("height", height);
 
-    // parse user input into JSON
-    var jsonString = document.getElementById("graph-input").value;
-    var json = JSON.parse(jsonString);
+    var json = userInputToD3Json();
 
     force.nodes(json.nodes)
         .links(json.links)
