@@ -7,7 +7,7 @@ function userInputToD3Json() {
     input = input.replaceAll(" ", "");
 
     var curIndex = 0;
-    var idToIndex = {};
+    var nameToId = {};
 
     var graphJson = { "nodes": [], "links": [] }
 
@@ -16,32 +16,35 @@ function userInputToD3Json() {
         var src = nodes[0];
         var dst = nodes[1];
 
-        var srcIndex, dstIndex;
-        if (!idToIndex.hasOwnProperty(src)) {
-            graphJson["nodes"].push({ "name": src });
-            idToIndex[src] = curIndex;
-            srcIndex = curIndex;
+        var srcId, dstId;
+        if (!nameToId.hasOwnProperty(src)) {
+            graphJson["nodes"].push({ "name": src, "id": curIndex });
+            nameToId[src] = curIndex;
+            srcId = curIndex;
             curIndex++;
         } else {
-            srcIndex = idToIndex[src];
+            srcId = nameToId[src];
         }
 
-        if (!idToIndex.hasOwnProperty(dst)) {
-            graphJson["nodes"].push({ "name": dst });
-            idToIndex[dst] = curIndex;
-            dstIndex = curIndex;
+        if (!nameToId.hasOwnProperty(dst)) {
+            graphJson["nodes"].push({ "name": dst, "id": curIndex });
+            nameToId[dst] = curIndex;
+            dstId = curIndex;
             curIndex++;
         } else {
-            dstIndex = idToIndex[dst];
+            dstId = nameToId[dst];
         }
 
         graphJson["links"].push(
             {
-                "source": srcIndex,
-                "target": dstIndex
+                "source": srcId,
+                "target": dstId
             });
     });
 
+    console.log("myjson")
     console.log(graphJson);
     return graphJson;
+
+    // return JSON.parse('{"nodes": [{"name": "1","id": 1},{"name": "2","id": 2},{"name": "3","id": 3},{"name": "4","id": 4}],"links": [{"source": 1,"target": 2},{"source": 2,"target": 4},{"source": 4,"target": 2}]}')
 }
