@@ -1,6 +1,27 @@
+
 String.prototype.replaceAll = function(search, replacement) {
     return this.split(search).join(replacement);
 };
+
+function userInputToAdjacencyList() {
+    var input = document.getElementById("graph-input").value;
+    input = input.replaceAll(" ", "");
+
+    var adjacencyList = {}
+    input.split("\n").forEach(line => {
+        var nodes = line.split("->");
+        var src = nodes[0];
+        var dst = nodes[1];
+
+        if(adjacencyList.hasOwnProperty(src)) {
+            adjacencyList[src].push(dst);
+        } else {
+            adjacencyList[src] = [dst];
+        }
+    });
+
+    return adjacencyList;
+}
 
 function userInputToD3Json() {
     var input = document.getElementById("graph-input").value;

@@ -12,9 +12,19 @@
         <div class="column">
             <button onclick="renderGraph()">Render Graph</button>
             <textarea id="graph-input" spellcheck="false">a -> b
-b -> c</textarea>
+b -> c
+c -> d</textarea>
+
+        <button onclick="runDFS()">Run DFS</button>
+        <br/>
+        <input type="text" placeholder="start node" id="start_node">
+        <input type="text" placeholder="target node" id="end_node">
+
+
         </div>
         <div class="column" id="graph-column">
+            <button onclick="prevState()">Back</button>
+            <button onclick="nextState()">Next</button>
             <svg width="960" height="600"></svg>
         </div>
     </div>
@@ -23,6 +33,7 @@ b -> c</textarea>
     <script src="https://d3js.org/d3-selection-multi.v1.js"></script>
     <script src="scripts/parseInput.js"></script>
     <script src="scripts/index.js"></script>
+    <script src="scripts/dfs.js"></script>
 </body>
 
 </html>

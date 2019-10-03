@@ -1,7 +1,14 @@
 var svg;
-var width = 960, height = 600;
+const width = 960, height = 600;
+const nodePrefix = "node_"
 var node;
 var link;
+var adjacencyList;
+var d3Json;
+
+var states;
+var stateIndex;
+
 
 var simulation = d3.forceSimulation()
     .force("link", d3.forceLink().id(function (d) { return d.id; }).distance(100).strength(1))
@@ -9,12 +16,12 @@ var simulation = d3.forceSimulation()
     .force("center", d3.forceCenter(width / 2, height / 2));
 
 function renderGraph() {
-    json = userInputToD3Json();
-    update(json.links, json.nodes);
+    d3Json = userInputToD3Json();
+    adjacencyList = userInputToAdjacencyList();
+    update(d3Json.links, d3Json.nodes);
 }
 
 function update(links, nodes) {
-
     // remove the old graph
     d3.select("svg").remove()
 
@@ -67,6 +74,7 @@ function update(links, nodes) {
         .enter()
         .append("g")
         .attr("class", "node")
+        .attr("id", function (d, i) { return nodePrefix + d.name; })
         .call(d3.drag()
             .on("start", dragstarted)
             .on("drag", dragged)
@@ -127,4 +135,50 @@ function dragended(d) {
     d.fy = undefined;
 }
 
+
+
+function runDFS() {
+    var start = document.getElementById("start_node").value;
+    var end = document.getElementById("end_node").value;
+
+    states = dfs(adjacencyList, start, end);
+    stateIndex = 0
+    updateGraphState();
+}
+
+function updateGraphState() {
+    curState = states[stateIndex];
+    // reset all nodes to black
+    for (const node of d3Json.nodes) {
+        const name = node["name"];
+        // #node_nodename is a unique id for each node
+        // initially just make the node black
+        d3.select("#" + nodePrefix + name).select("circle").style("fill", "black");
+
+        // update visited node colors to blue
+        if (curState.visited.has(name)) {
+            d3.select("#" + nodePrefix + name).select("circle").style("fill", "blue");
+        }
+
+        // update current node to green
+        if (curState.curNode === name) {
+            d3.select("#" + nodePrefix + name).select("circle").style("fill", "green");
+        }
+    }
+}
+
+// increment state index. 
+function nextState() {
+    // If go out of bounds, keep it at the last state
+    stateIndex = Math.min(states.length - 1, stateIndex + 1);
+    updateGraphState();
+}
+
+function prevState() {
+    // if go out of bounds, keep at first state
+    stateIndex = Math.max(0, stateIndex - 1);
+    updateGraphState();
+}
+
+// render the graph with the default input
 renderGraph()
