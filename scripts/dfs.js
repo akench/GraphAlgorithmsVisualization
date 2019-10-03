@@ -25,11 +25,18 @@ function _dfs(adjacencyList, cur, dst, visited, states) {
     states.push({"curNode": cur, "visited": new Set(visited)});
 
     if(dst === cur) {
-        return;
+        return true;
     }
 
     visited.add(cur);
-    for(var neighbor of adjacencyList[cur]) {
-        _dfs(adjacencyList, neighbor, dst, visited, states);
+    // javascript will throw an error trying to iterate through an empty list
+    if (adjacencyList.hasOwnProperty(cur)) {
+        for(var neighbor of adjacencyList[cur]) {
+            if(_dfs(adjacencyList, neighbor, dst, visited, states)) {
+                return true;
+            }
+        }
     }
+
+    return false;
 }

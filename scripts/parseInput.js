@@ -1,3 +1,5 @@
+const defaultInput = "0 -> 8\n8 -> 4\n0 -> 3\n3 -> 4\n4 -> 3\n0 -> 1\n1 -> 7\n3 -> 2\n2 -> 7\n7 -> 2\n2 -> 5\n5 -> 6";
+
 
 String.prototype.replaceAll = function(search, replacement) {
     return this.split(search).join(replacement);
@@ -69,3 +71,4 @@ function userInputToD3Json() {
 
     // return JSON.parse('{"nodes": [{"name": "1","id": 1},{"name": "2","id": 2},{"name": "3","id": 3},{"name": "4","id": 4}],"links": [{"source": 1,"target": 2},{"source": 2,"target": 4},{"source": 4,"target": 2}]}')
 }
+

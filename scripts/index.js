@@ -11,11 +11,16 @@ var stateIndex;
 
 
 var simulation = d3.forceSimulation()
-    .force("link", d3.forceLink().id(function (d) { return d.id; }).distance(100).strength(1))
+    .force("link", d3.forceLink().id(function (d) { return d.id; }).distance(150).strength(1))
     .force("charge", d3.forceManyBody())
-    .force("center", d3.forceCenter(width / 2, height / 2));
+    .force("center", d3.forceCenter(width / 2, height / 2))
+    .force("collision", d3.forceCollide().radius(60));
 
 function renderGraph() {
+    // reset variables kept in state
+    states = [];
+    stateIndex = 0;
+
     d3Json = userInputToD3Json();
     adjacencyList = userInputToAdjacencyList();
     update(d3Json.links, d3Json.nodes);
@@ -180,5 +185,11 @@ function prevState() {
     updateGraphState();
 }
 
-// render the graph with the default input
-renderGraph()
+
+function main() {
+    document.getElementById("graph-input").value = defaultInput;
+    // render the graph with the default input
+    renderGraph();
+}
+
+main();
