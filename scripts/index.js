@@ -142,15 +142,30 @@ function dragended(d) {
 
 
 
+
+
+// run the DFS algorithm with the specified input
 function runDFS() {
-    var start = document.getElementById("start_node").value;
-    var end = document.getElementById("end_node").value;
+    var start = document.getElementById("start_node_dfs").value;
+    var end = document.getElementById("end_node_dfs").value;
 
     states = dfs(adjacencyList, start, end);
     stateIndex = 0
     updateGraphState();
 }
 
+function runBFS() {
+    var start = document.getElementById("start_node_bfs").value;
+    var end = document.getElementById("end_node_bfs").value;
+
+    states = bfs(adjacencyList, start, end);
+    stateIndex = 0;
+    updateGraphState();
+}
+
+
+// use the current state that the user wants to view
+// to update the colors of nodes in displayed graph
 function updateGraphState() {
     curState = states[stateIndex];
     // reset all nodes to black
@@ -172,13 +187,14 @@ function updateGraphState() {
     }
 }
 
-// increment state index. 
+// view the algorithm's next state
 function nextState() {
     // If go out of bounds, keep it at the last state
     stateIndex = Math.min(states.length - 1, stateIndex + 1);
     updateGraphState();
 }
 
+// view the algorithm's previous state
 function prevState() {
     // if go out of bounds, keep at first state
     stateIndex = Math.max(0, stateIndex - 1);
@@ -186,10 +202,16 @@ function prevState() {
 }
 
 
-function main() {
+$(function() {
     document.getElementById("graph-input").value = defaultInput;
     // render the graph with the default input
     renderGraph();
-}
 
-main();
+    // display the input form for the selected algorithm
+    $("#algo-selector").change(() => {
+        $(".algo-input").hide();
+        var id = "#" + $("#algo-selector").val();
+        $(id).show();
+    })
+});
+
