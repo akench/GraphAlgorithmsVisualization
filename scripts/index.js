@@ -8,6 +8,8 @@ var d3Json;
 
 var states;
 var stateIndex;
+var isPlaying;
+var playingTimer;
 
 
 var simulation = d3.forceSimulation()
@@ -20,6 +22,7 @@ function renderGraph() {
     // reset variables kept in state
     states = [];
     stateIndex = 0;
+    isPlaying = false;
 
     d3Json = userInputToD3Json();
     adjacencyList = userInputToAdjacencyList();
@@ -191,6 +194,7 @@ function updateGraphState() {
 function nextState() {
     // If go out of bounds, keep it at the last state
     stateIndex = Math.min(states.length - 1, stateIndex + 1);
+    console.log(stateIndex)
     updateGraphState();
 }
 
@@ -201,6 +205,20 @@ function prevState() {
     updateGraphState();
 }
 
+function playOrPause() {
+    // if already playing, clear interval
+    if(isPlaying) {
+        pauseAnimation();
+    } else {
+        isPlaying = true;
+        playingTimer = setInterval(nextState, 1000);
+    }
+}
+
+function pauseAnimation() {
+    isPlaying = false;
+    clearInterval(playingTimer);
+}
 
 $(function() {
     document.getElementById("graph-input").value = defaultInput;

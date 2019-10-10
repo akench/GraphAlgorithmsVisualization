@@ -11,6 +11,11 @@
     <div class="row">
         <div class="column">
             <button onclick="renderGraph()">Render Graph</button>
+            <button onclick="prevState()">Back</button>
+            <button onclick="nextState()">Next</button>
+            <button onclick="playOrPause()">Play/Pause</button>
+
+            
             <textarea id="graph-input" spellcheck="false">a -> b
 b -> c
 c -> d</textarea>
@@ -34,8 +39,6 @@ c -> d</textarea>
 
         </div>
         <div class="column" id="graph-column">
-            <button onclick="prevState()">Back</button>
-            <button onclick="nextState()">Next</button>
             <svg width="960" height="600"></svg>
         </div>
     </div>
