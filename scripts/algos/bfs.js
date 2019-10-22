@@ -7,27 +7,31 @@ function bfs(adjacencyList, src, dst) {
     const visited = new Set();
 
     // used to display which nodes were seen
-    const seen = new Set(); 
+    const seen = new Set();
 
     visited.add(src);
     while (queue.length > 0) {
         const node = queue.shift();
         seen.add(node);
-        states.push({ "curNode": node, "visited": new Set(seen) });
 
-        if(node === dst) {
+        if (node === dst) {
+            // when find destination, make sure to update states
+            states.push({ "curNode": node, "visited": new Set(seen), "queue": [...queue] });
             break;
         }
 
         // javascript will throw an error trying if the node has no neighbors
         if (adjacencyList.hasOwnProperty(node)) {
             for (var neighbor of adjacencyList[node]) {
-                if(!visited.has(neighbor)) {
+                if (!visited.has(neighbor)) {
                     queue.push(neighbor);
                     visited.add(neighbor);
                 }
             }
         }
+
+        // make sure we push the state after queue is updated
+        states.push({ "curNode": node, "visited": new Set(seen), "queue": [...queue] });
     }
 
     return states;

@@ -65,10 +65,7 @@ function userInputToD3Json() {
             });
     });
 
-    console.log("myjson")
-    console.log(graphJson);
     return graphJson;
-
     // return JSON.parse('{"nodes": [{"name": "1","id": 1},{"name": "2","id": 2},{"name": "3","id": 3},{"name": "4","id": 4}],"links": [{"source": 1,"target": 2},{"source": 2,"target": 4},{"source": 4,"target": 2}]}')
 }
 

@@ -90,15 +90,15 @@ function update(links, nodes) {
         );
 
     node.append("circle")
-        .attr("r", 21)
-        .style("fill", function (d, i) { return "black" })
+        .attr("r", nodeRadius)
+        .style("fill", defaultNodeColor)
 
     node.append("title")
         .text(function (d) { return d.id; });
 
     node.append("text")
-        .attr("dx", -2)
-        .attr("dy", -30)
+        .attr("dx", -4)
+        .attr("dy", 3)
         .text(function (d) { return d.name });
 
     simulation
@@ -170,22 +170,34 @@ function runBFS() {
 // use the current state that the user wants to view
 // to update the colors of nodes in displayed graph
 function updateGraphState() {
+
+    // reset shown queue
+    $("#queue").text("");
+
     curState = states[stateIndex];
+
+    // show new queue
+    if (curState["queue"]) {
+        // convert queue to string
+        var queueStr = curState["queue"].join();
+        $("#queue").text(queueStr);
+    }
+
     // reset all nodes to black
     for (const node of d3Json.nodes) {
         const name = node["name"];
         // #node_nodename is a unique id for each node
-        // initially just make the node black
-        d3.select("#" + nodePrefix + name).select("circle").style("fill", "black");
+        // initially just make the node default color
+        d3.select("#" + nodePrefix + name).select("circle").style("fill", defaultNodeColor);
 
-        // update visited node colors to blue
+        // update visited node colors 
         if (curState.visited.has(name)) {
-            d3.select("#" + nodePrefix + name).select("circle").style("fill", "blue");
+            d3.select("#" + nodePrefix + name).select("circle").style("fill", visitedNodeColor);
         }
 
-        // update current node to green
+        // update current node color
         if (curState.curNode === name) {
-            d3.select("#" + nodePrefix + name).select("circle").style("fill", "green");
+            d3.select("#" + nodePrefix + name).select("circle").style("fill", currentNodeColor);
         }
     }
 }
@@ -207,7 +219,7 @@ function prevState() {
 
 function playOrPause() {
     // if already playing, clear interval
-    if(isPlaying) {
+    if (isPlaying) {
         pauseAnimation();
     } else {
         isPlaying = true;
@@ -220,7 +232,9 @@ function pauseAnimation() {
     clearInterval(playingTimer);
 }
 
-$(function() {
+
+// runs on page load
+$(function () {
     document.getElementById("graph-input").value = defaultInput;
     // render the graph with the default input
     renderGraph();
