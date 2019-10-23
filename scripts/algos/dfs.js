@@ -31,7 +31,8 @@ function _dfs(adjacencyList, cur, dst, visited, states) {
     visited.add(cur);
     // javascript will throw an error trying if the node has no neighbors
     if (adjacencyList.hasOwnProperty(cur)) {
-        for(var neighbor of adjacencyList[cur]) {
+        for(var neighborEdge of adjacencyList[cur]) {
+            var neighbor = neighborEdge["node"];
             if(_dfs(adjacencyList, neighbor, dst, visited, states)) {
                 return true;
             }

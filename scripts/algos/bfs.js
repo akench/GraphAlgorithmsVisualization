@@ -22,7 +22,9 @@ function bfs(adjacencyList, src, dst) {
 
         // javascript will throw an error trying if the node has no neighbors
         if (adjacencyList.hasOwnProperty(node)) {
-            for (var neighbor of adjacencyList[node]) {
+            for (var neighborEdge of adjacencyList[node]) {
+                var neighbor = neighborEdge["node"];
+
                 if (!visited.has(neighbor)) {
                     queue.push(neighbor);
                     visited.add(neighbor);

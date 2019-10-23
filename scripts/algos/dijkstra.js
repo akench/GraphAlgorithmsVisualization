@@ -1,0 +1,3 @@
+function dijkstra(adjacencyList, src) {
+    
+}
