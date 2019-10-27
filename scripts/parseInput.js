@@ -13,10 +13,16 @@ function userInputToAdjacencyList() {
         var weight = nodeLink.weight;
 
         var edge = {"node": dst, "weight": weight};
+        // add the given edge
         if(adjacencyList.hasOwnProperty(src)) {
             adjacencyList[src].push(edge);
         } else {
             adjacencyList[src] = [edge];
+        }
+
+        // may have to add the destination to the hashmap if not exist
+        if(!adjacencyList.hasOwnProperty(dst)) {
+            adjacencyList[dst] = [];
         }
     });
 
@@ -83,6 +89,6 @@ function lineToNodeLink(line) {
     return {
         "src": tokens[0],
         "dst": tokens[1],
-        "weight": tokens[2]
+        "weight": parseFloat(tokens[2])
     }
 }

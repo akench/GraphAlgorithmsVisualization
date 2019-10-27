@@ -12,7 +12,7 @@ var playingTimer;
 
 
 var simulation = d3.forceSimulation()
-    .force("link", d3.forceLink().id(function (d) { return d.id; }).distance(150).strength(0.2))
+    .force("link", d3.forceLink().id(function (d) { return d.id; }).distance(150).strength(.2))
     .force("charge", d3.forceManyBody())
     .force("center", d3.forceCenter(width / 2, height / 2))
     .force("collision", d3.forceCollide().radius(80));
@@ -92,6 +92,7 @@ function update(links, nodes) {
     edgelabels.append('textPath')
         .attr('xlink:href', function (d, i) { return '#edgepath' + i })
         .style("text-anchor", "middle")
+        .style("text-decoration", "underline")
         .style("pointer-events", "none")
         .attr("startOffset", "50%")
         .text(function (d) { return d.weight });
@@ -199,6 +200,13 @@ function runBFS() {
     updateGraphState();
 }
 
+function runDijkstra() {
+    var start = document.getElementById("start_node_dijkstra").value;
+    states = dijkstra(adjacencyList, start);
+    console.log(states);
+    stateIndex = 0;
+    updateGraphState();
+}
 
 // use the current state that the user wants to view
 // to update the colors of nodes in displayed graph
@@ -279,4 +287,3 @@ $(function () {
         $(id).show();
     })
 });
-
