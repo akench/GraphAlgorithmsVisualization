@@ -16,7 +16,7 @@
             <button onclick="nextState()">Next</button>
             <button onclick="playOrPause()">Play/Pause</button>
 
-            
+
             <textarea id="graph-input" spellcheck="false"></textarea>
 
 
@@ -42,12 +42,13 @@
             </div>
         </div>
 
-        <div id="queue">
+        <div class="column" id="algo-info-column">
+            <div id="distances-table-container"></div>
+            <div id="queue"></div>
         </div>
 
+
         <div class="column" id="graph-column">
-            <div id="distances-table-container"></div>
-            <svg width="600" height="600"></svg>
         </div>
     </div>
 
@@ -58,6 +59,8 @@
     <script src="https://cdn.jsdelivr.net/npm/heap-js@1.4.1/dist/heap-js.umd.js"></script>
     <script src="scripts/staticValues.js"></script>
     <script src="scripts/parseInput.js"></script>
+    <script src="scripts/graphDisplay.js"></script>
+    <script src="scripts/heapDisplay.js"></script>
     <script src="scripts/index.js"></script>
     <script src="scripts/algos/MinHeap.js"></script>
     <script src="scripts/algos/dfs.js"></script>

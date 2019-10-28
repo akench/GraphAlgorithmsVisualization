@@ -1,7 +1,3 @@
-var svg;
-const width = 960, height = 600;
-const nodePrefix = "node_"
-var node, link, edgepaths, edgelabels;
 var adjacencyList;
 var d3Json;
 
@@ -10,12 +6,6 @@ var stateIndex;
 var isPlaying;
 var playingTimer;
 
-
-var simulation = d3.forceSimulation()
-    .force("link", d3.forceLink().id(function (d) { return d.id; }).distance(150).strength(.2))
-    .force("charge", d3.forceManyBody())
-    .force("center", d3.forceCenter(width / 2, height / 2))
-    .force("collision", d3.forceCollide().radius(80));
 
 function renderGraph() {
     // reset variables kept in state
@@ -27,157 +17,6 @@ function renderGraph() {
     adjacencyList = userInputToAdjacencyList();
     update(d3Json.links, d3Json.nodes);
 }
-
-function update(links, nodes) {
-    // remove the old graph
-    d3.select("svg").remove()
-
-    // readd a new graph
-    svg = d3.select("#graph-column").append("svg")
-        .attr("width", width)
-        .attr("height", height);
-
-
-    svg.append('defs').append('marker')
-        .attrs({
-            'id': 'arrowhead',
-            'viewBox': '-0 -5 10 10',
-            'refX': 26,
-            'refY': 0,
-            'orient': 'auto',
-            'markerWidth': 13,
-            'markerHeight': 13,
-            'xoverflow': 'visible'
-        })
-        .append('svg:path')
-        .attr('d', 'M 0,-5 L 10 ,0 L 0,5')
-        .attr('fill', '#999')
-        .style('stroke', 'none');
-
-    link = svg.selectAll(".link")
-        .data(links)
-        .enter()
-        .append("line")
-        .attr("class", "link")
-        .attr('marker-end', 'url(#arrowhead)')
-
-    // return the link weight as the title
-    link.append("title")
-        .text(function (d) { return d.weight; });
-
-    edgepaths = svg.selectAll(".edgepath")
-        .data(links)
-        .enter()
-        .append('path')
-        .attrs({
-            'class': 'edgepath',
-            'fill-opacity': 0,
-            'stroke-opacity': 0,
-            'id': function (d, i) { return 'edgepath' + i }
-        })
-        .style("pointer-events", "none");
-
-    edgelabels = svg.selectAll(".edgelabel")
-        .data(links)
-        .enter()
-        .append('text')
-        .style("pointer-events", "none")
-        .attrs({
-            'class': 'edgelabel',
-            'id': function (d, i) { return 'edgelabel' + i },
-            'font-size': 20,
-            'fill': '#aaa'
-        });
-
-    edgelabels.append('textPath')
-        .attr('xlink:href', function (d, i) { return '#edgepath' + i })
-        .style("text-anchor", "middle")
-        .style("text-decoration", "underline")
-        .style("pointer-events", "none")
-        .attr("startOffset", "50%")
-        .text(function (d) { return d.weight });
-
-
-    node = svg.selectAll(".node")
-        .data(nodes)
-        .enter()
-        .append("g")
-        .attr("class", "node")
-        .attr("id", function (d, i) { return nodePrefix + d.name; })
-        .call(d3.drag()
-            .on("start", dragstarted)
-            .on("drag", dragged)
-            .on("end", dragended)
-        );
-
-    node.append("circle")
-        .attr("r", nodeRadius)
-        .style("fill", defaultNodeColor)
-
-    node.append("title")
-        .text(function (d) { return d.id; });
-
-    node.append("text")
-        .attr("dx", -4)
-        .attr("dy", 3)
-        .text(function (d) { return d.name });
-
-    simulation
-        .nodes(nodes)
-        .on("tick", ticked);
-
-    simulation.force("link")
-        .links(links);
-
-    simulation.alpha(1).restart();
-}
-
-function ticked() {
-    link
-        .attr("x1", function (d) { return d.source.x; })
-        .attr("y1", function (d) { return d.source.y; })
-        .attr("x2", function (d) { return d.target.x; })
-        .attr("y2", function (d) { return d.target.y; });
-
-    node
-        .attr("transform", function (d) { return "translate(" + d.x + ", " + d.y + ")"; });
-
-    edgepaths.attr('d', function (d) {
-        return 'M ' + d.source.x + ' ' + d.source.y + ' L ' + d.target.x + ' ' + d.target.y;
-    });
-
-    edgelabels.attr('transform', function (d) {
-        if (d.target.x < d.source.x) {
-            var bbox = this.getBBox();
-
-            rx = bbox.x + bbox.width / 2;
-            ry = bbox.y + bbox.height / 2;
-            return 'rotate(180 ' + rx + ' ' + ry + ')';
-        }
-        else {
-            return 'rotate(0)';
-        }
-    });
-}
-
-function dragstarted(d) {
-    if (!d3.event.active) simulation.alphaTarget(0.3).restart()
-    d.fx = d.x;
-    d.fy = d.y;
-}
-
-function dragged(d) {
-    d.fx = d3.event.x;
-    d.fy = d3.event.y;
-}
-
-function dragended(d) {
-    if (!d3.event.active) simulation.alphaTarget(0);
-    d.fx = undefined;
-    d.fy = undefined;
-}
-
-
 
 
 
@@ -209,18 +48,24 @@ function runDijkstra() {
     updateGraphState();
 }
 
-// use the current state that the user wants to view
-// to update the colors of nodes in displayed graph
+// update the entire UI with the new graph state
 function updateGraphState() {
-
-    curState = states[stateIndex];
+    var curState = states[stateIndex];
 
     // show the queue, if applicable
-    showQueue(curState);
+    showQueue(curState.queue);
 
     // update distances, if applicable
-    showDistances(curState);
+    showDistances(curState.distancesMap);
 
+    // show heap, if applicable
+    showMinHeap(curState.heap);
+
+    // update node colors (visited and cur nodes)
+    updateNodeColors(curState);
+}
+
+function updateNodeColors(curState) {
     // reset all nodes to black
     for (const node of d3Json.nodes) {
         const name = node["name"];
@@ -240,29 +85,28 @@ function updateGraphState() {
     }
 }
 
-function showQueue(curState) {
+function showQueue(queue) {
     // reset shown queue
     $("#queue").text("");
 
     // show new queue
-    if (curState["queue"]) {
+    if (queue) {
         // convert queue to string
-        var queueStr = curState["queue"].join();
+        var queueStr = queue.join();
         $("#queue").text(queueStr);
     }
 }
 
-function showDistances(curState) {
+function showDistances(distancesMap) {
+    var container = $("#distances-table-container");
+    container.empty(); // empty the old table
+
     // don't do anything if there's no distances map
-    if(!curState.distancesMap) {
+    if (!distancesMap) {
         return;
     }
 
-    var container = $("#distances-table-container");
     var table = $("<table>");
-    var distancesMap = curState.distancesMap;
-
-    container.empty(); // empty the old table
 
     // create the header
     var header = $("<tr>");
@@ -271,8 +115,8 @@ function showDistances(curState) {
     table.append(header);
 
     // loop through the distancesMap and add row for each entry.
-    for(var node in distancesMap) {
-        if(distancesMap.hasOwnProperty(node)) {
+    for (var node in distancesMap) {
+        if (distancesMap.hasOwnProperty(node)) {
             var tr = $("<tr>");
             tr.append("<td>" + node + "</td>");
             tr.append("<td>" + distancesMap[node] + "</td>");
@@ -283,6 +127,11 @@ function showDistances(curState) {
     container.append(table);
 }
 
+function showMinHeap(minHeap) {
+    if(minHeap) {
+        displayMinHeap(minHeap);
+    }
+}
 
 // view the algorithm's next state
 function nextState() {
