@@ -1,5 +1,8 @@
 const defaultInput = "a -> b : 4\na -> c : 2\nc -> b : 1\nb -> d : 5\nc -> d : 8\nc -> e :10\nd -> e : 2\nd -> z : 6\ne -> z : 5";
 
+/**
+ * Parse the raw user input and build an adjacency list of the graph
+ */
 function userInputToAdjacencyList() {
     var input = document.getElementById("graph-input").value;
     input = input.replaceAll(" ", "");
@@ -20,7 +23,7 @@ function userInputToAdjacencyList() {
             adjacencyList[src] = [edge];
         }
 
-        // may have to add the destination to the hashmap if not exist
+        // may have to add the destination to the dict if not exist
         if(!adjacencyList.hasOwnProperty(dst)) {
             adjacencyList[dst] = [];
         }
@@ -30,6 +33,10 @@ function userInputToAdjacencyList() {
     return adjacencyList;
 }
 
+/**
+ * Parses raw user input to generate a Json object that D3 uses to render the graph
+ * The json object relies on each node having a numeric id instead of a string id
+ */
 function userInputToD3Json() {
     var input = document.getElementById("graph-input").value;
     input = input.replaceAll(" ", "");
@@ -75,7 +82,6 @@ function userInputToD3Json() {
 
     console.log(graphJson);
     return graphJson;
-    // return JSON.parse('{"nodes": [{"name": "1","id": 1},{"name": "2","id": 2},{"name": "3","id": 3},{"name": "4","id": 4}],"links": [{"source": 1,"target": 2},{"source": 2,"target": 4},{"source": 4,"target": 2}]}')
 }
 
 
@@ -85,7 +91,7 @@ String.prototype.replaceAll = function(search, replacement) {
 
 // converts user input line to graph link
 function lineToNodeLink(line) {
-    var tokens = line.split(/->|:/)
+    var tokens = line.split(/->|:/) // split by arrow or colon
     return {
         "src": tokens[0],
         "dst": tokens[1],

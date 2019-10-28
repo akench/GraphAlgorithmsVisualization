@@ -14,13 +14,12 @@ function dijkstra(adjacencyList, src) {
         var node = openNodes.pop();
 
         console.log("content " + JSON.stringify(openNodes.content));
-        var newDistancesMap = JSON.parse(JSON.stringify(distancesMap));
         states.push(
             { 
                 'curNode': node.id, 
                 'visited': new Set(closedNodes), 
-                'heap': [...openNodes.content], 
-                'distancesMap': newDistancesMap 
+                'heap': clone(openNodes.content), 
+                'distancesMap': clone(distancesMap) 
             }
         )
 
@@ -44,13 +43,12 @@ function dijkstra(adjacencyList, src) {
     }
 
     // add the final state when we are done
-    var newDistancesMap = JSON.parse(JSON.stringify(distancesMap));
     states.push(
         { 
             'curNode': undefined, 
             'visited': new Set(closedNodes), 
-            'heap': [...openNodes.content], 
-            'distancesMap': newDistancesMap 
+            'heap': clone(openNodes.content), 
+            'distancesMap': clone(distancesMap) 
         }
     )
     return states;
@@ -89,4 +87,8 @@ function initMinHeap(distancesMap) {
     }
 
     return minHeap;
+}
+
+function clone(obj) {
+    return JSON.parse(JSON.stringify(obj));
 }

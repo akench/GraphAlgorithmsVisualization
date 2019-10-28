@@ -202,6 +202,7 @@ function runBFS() {
 
 function runDijkstra() {
     var start = document.getElementById("start_node_dijkstra").value;
+
     states = dijkstra(adjacencyList, start);
     console.log(states);
     stateIndex = 0;
@@ -212,17 +213,13 @@ function runDijkstra() {
 // to update the colors of nodes in displayed graph
 function updateGraphState() {
 
-    // reset shown queue
-    $("#queue").text("");
-
     curState = states[stateIndex];
 
-    // show new queue
-    if (curState["queue"]) {
-        // convert queue to string
-        var queueStr = curState["queue"].join();
-        $("#queue").text(queueStr);
-    }
+    // show the queue, if applicable
+    showQueue(curState);
+
+    // update distances, if applicable
+    showDistances(curState);
 
     // reset all nodes to black
     for (const node of d3Json.nodes) {
@@ -242,6 +239,50 @@ function updateGraphState() {
         }
     }
 }
+
+function showQueue(curState) {
+    // reset shown queue
+    $("#queue").text("");
+
+    // show new queue
+    if (curState["queue"]) {
+        // convert queue to string
+        var queueStr = curState["queue"].join();
+        $("#queue").text(queueStr);
+    }
+}
+
+function showDistances(curState) {
+    // don't do anything if there's no distances map
+    if(!curState.distancesMap) {
+        return;
+    }
+
+    var container = $("#distances-table-container");
+    var table = $("<table>");
+    var distancesMap = curState.distancesMap;
+
+    container.empty(); // empty the old table
+
+    // create the header
+    var header = $("<tr>");
+    header.append("<td>node</td>");
+    header.append("<td>shortest distance</td>");
+    table.append(header);
+
+    // loop through the distancesMap and add row for each entry.
+    for(var node in distancesMap) {
+        if(distancesMap.hasOwnProperty(node)) {
+            var tr = $("<tr>");
+            tr.append("<td>" + node + "</td>");
+            tr.append("<td>" + distancesMap[node] + "</td>");
+            table.append(tr);
+        }
+    }
+
+    container.append(table);
+}
+
 
 // view the algorithm's next state
 function nextState() {
