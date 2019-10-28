@@ -59,7 +59,10 @@ function updateGraphState() {
     showDistances(curState.distancesMap);
 
     // show heap, if applicable
-    showMinHeap(curState.heap);
+    displayMinHeap(curState.heap);
+
+    // show log, if applicable
+    showLog(curState.log);
 
     // update node colors (visited and cur nodes)
     updateNodeColors(curState);
@@ -127,11 +130,15 @@ function showDistances(distancesMap) {
     container.append(table);
 }
 
-function showMinHeap(minHeap) {
-    if(minHeap) {
-        displayMinHeap(minHeap);
+function showLog(log) {
+    $("#log").text("");
+    if (log) {
+        var logString = log.join("\n");
+        console.log(logString);
+        $("#log").text(logString);
     }
 }
+
 
 // view the algorithm's next state
 function nextState() {

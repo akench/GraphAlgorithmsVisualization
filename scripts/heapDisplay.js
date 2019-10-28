@@ -3,11 +3,14 @@ function displayMinHeap(minHeapArr) {
     // remove the old heap svg
     d3.select("#heapSvg").remove()
 
+    // don't show a min heap if there is nothing to show
+    if(!minHeapArr) return;
+
     // set the dimensions and margins of the diagram
     var margin = { top: 40, right: 90, bottom: 50, left: 0 },
         // width = 500 - margin.left - margin.right,
         // height = 300 - margin.top - margin.bottom;
-        width = $("#algo-info-column").width(),
+        width = $("#min-heap-container").width(),
         height = width / 2;
 
     // declares a tree layout and assigns the size
@@ -27,7 +30,7 @@ function displayMinHeap(minHeapArr) {
     // readd a new heap svg
     // appends a 'group' element to 'svg'
     // moves the 'group' element to the top left margin
-    var heapSvg = d3.select("#algo-info-column").append("svg")
+    var heapSvg = d3.select("#min-heap-container").append("svg")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
         .attr("id", "heapSvg");

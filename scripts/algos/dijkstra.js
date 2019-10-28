@@ -7,21 +7,22 @@ function dijkstra(adjacencyList, src) {
     var openNodes = initMinHeap(distancesMap);
     var closedNodes = new Set();
 
-    var states = [];
+    // add the initial state
+    var states = [{
+        'curNode': undefined,                   // current node visiting
+        'visited': new Set(closedNodes),        // visited nodes
+        'heap': clone(openNodes.content),       // current min heap state
+        'distancesMap': clone(distancesMap),    // current optimal distances
+        'log': []                               // operations in this iter.
+    }];
 
-    states.push(
-        {
-            'curNode': undefined,
-            'visited': new Set(closedNodes),
-            'heap': clone(openNodes.content),
-            'distancesMap': clone(distancesMap)
-        }
-    )
     while (openNodes.size() > 0) {
         // visit node with lowest distance
         var node = openNodes.pop();
 
         closedNodes.add(node.id);
+
+        var log = [`Visited ${node.id}`];
 
         // calculate distance to all neighbors
         if (adjacencyList.hasOwnProperty(node.id)) {
@@ -34,18 +35,20 @@ function dijkstra(adjacencyList, src) {
                     if (neighborCost < distancesMap[neighborId]) {
                         distancesMap[neighborId] = neighborCost;
                         openNodes.decreaseKey(neighborId, neighborCost);
+                        log.push(`Updated distance to ${neighborId} as ${neighborCost}`);
                     }
                 }
             }
         }
-
-
+        
+        // add state after this iteration
         states.push(
             {
                 'curNode': node.id,
                 'visited': new Set(closedNodes),
                 'heap': clone(openNodes.content),
-                'distancesMap': clone(distancesMap)
+                'distancesMap': clone(distancesMap),
+                'log': log
             }
         )
     }
