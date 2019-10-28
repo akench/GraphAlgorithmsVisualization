@@ -23,18 +23,16 @@ function renderGraph() {
 // run the DFS algorithm with the specified input
 function runDFS() {
     var start = document.getElementById("start_node_dfs").value;
-    var end = document.getElementById("end_node_dfs").value;
 
-    states = dfs(adjacencyList, start, end);
+    states = dfs(adjacencyList, start);
     stateIndex = 0
     updateGraphState();
 }
 
 function runBFS() {
     var start = document.getElementById("start_node_bfs").value;
-    var end = document.getElementById("end_node_bfs").value;
 
-    states = bfs(adjacencyList, start, end);
+    states = bfs(adjacencyList, start);
     stateIndex = 0;
     updateGraphState();
 }
@@ -122,7 +120,8 @@ function showDistances(distancesMap) {
         if (distancesMap.hasOwnProperty(node)) {
             var tr = $("<tr>");
             tr.append("<td>" + node + "</td>");
-            tr.append("<td>" + distancesMap[node] + "</td>");
+            var distance = (distancesMap[node] == Number.MAX_VALUE) ? "∞" : distancesMap[node];
+            tr.append("<td>" + distance + "</td>");
             table.append(tr);
         }
     }
@@ -144,7 +143,6 @@ function showLog(log) {
 function nextState() {
     // If go out of bounds, keep it at the last state
     stateIndex = Math.min(states.length - 1, stateIndex + 1);
-    console.log(stateIndex)
     updateGraphState();
 }
 

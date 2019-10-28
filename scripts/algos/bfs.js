@@ -1,4 +1,4 @@
-function bfs(adjacencyList, src, dst) {
+function bfs(adjacencyList, src) {
 
     const states = [];
     const queue = [];
@@ -13,12 +13,6 @@ function bfs(adjacencyList, src, dst) {
     while (queue.length > 0) {
         const node = queue.shift();
         seen.add(node);
-
-        if (node === dst) {
-            // when find destination, make sure to update states
-            states.push({ "curNode": node, "visited": new Set(seen), "queue": [...queue] });
-            break;
-        }
 
         // javascript will throw an error trying if the node has no neighbors
         if (adjacencyList.hasOwnProperty(node)) {

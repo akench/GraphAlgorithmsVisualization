@@ -13,31 +13,23 @@ will store every stage of graph in list of dictionaries
     }
 ]
 */
-function dfs(adjacencyList, src, dst) {
+function dfs(adjacencyList, src) {
     var states = [];
-    _dfs(adjacencyList, src, dst, new Set(), states);
+    _dfs(adjacencyList, src, new Set(), states);
     return states;
 }
 
-function _dfs(adjacencyList, cur, dst, visited, states) {
+function _dfs(adjacencyList, cur, visited, states) {
     if(visited.has(cur)) return;
 
     states.push({"curNode": cur, "visited": new Set(visited)});
-
-    if(dst === cur) {
-        return true;
-    }
 
     visited.add(cur);
     // javascript will throw an error trying if the node has no neighbors
     if (adjacencyList.hasOwnProperty(cur)) {
         for(var neighborEdge of adjacencyList[cur]) {
             var neighbor = neighborEdge["node"];
-            if(_dfs(adjacencyList, neighbor, dst, visited, states)) {
-                return true;
-            }
+            _dfs(adjacencyList, neighbor, visited, states);
         }
     }
-
-    return false;
 }
