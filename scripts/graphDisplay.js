@@ -14,8 +14,6 @@ function update(links, nodes) {
     // remove the old graph
     d3.select("#graphSvg").remove()
 
-    console.log($("#graph-column").width())
-    console.log($("#graph-column").height())
     // readd a new graph
     var graphSvg = d3.select("#graph-column").append("svg")
         .attr("width", width)

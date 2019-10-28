@@ -1,5 +1,8 @@
 function displayMinHeap(minHeapArr) {
 
+    // remove the old heap svg
+    d3.select("#heapSvg").remove()
+
     // set the dimensions and margins of the diagram
     var margin = { top: 40, right: 90, bottom: 50, left: 0 },
         // width = 500 - margin.left - margin.right,
@@ -13,13 +16,13 @@ function displayMinHeap(minHeapArr) {
 
     //  assigns the data to a hierarchy using parent-child relationships
     var treeData = heapArrToNestedObject(minHeapArr, 0);
+    if (!treeData) {
+        return;
+    }
     var nodes = d3.hierarchy(treeData);
 
     // maps the node data to the tree layout
     nodes = treemap(nodes);
-
-    // remove the old heap svg
-    d3.select("#heapSvg").remove()
 
     // readd a new heap svg
     // appends a 'group' element to 'svg'
@@ -82,13 +85,13 @@ recursive call to 2n+1 and recursive call to 2n+2 indices
 */
 function heapArrToNestedObject(heapArr, curIndex) {
 
-    if(!heapArr[curIndex]) {
-        return {};
+    if (!heapArr[curIndex]) {
+        return undefined;
     }
 
     var dict = {
         name: buildNodeName(heapArr[curIndex]),
-        children : []
+        children: []
     };
 
     var child1 = 2 * curIndex + 1;
@@ -97,7 +100,7 @@ function heapArrToNestedObject(heapArr, curIndex) {
     if (child1 < heapArr.length) {
         dict.children.push(heapArrToNestedObject(heapArr, child1));
     }
-    if(child2 < heapArr.length) {
+    if (child2 < heapArr.length) {
         dict.children.push(heapArrToNestedObject(heapArr, child2));
     }
 

@@ -9,19 +9,17 @@ function dijkstra(adjacencyList, src) {
 
     var states = [];
 
+    states.push(
+        {
+            'curNode': undefined,
+            'visited': new Set(closedNodes),
+            'heap': clone(openNodes.content),
+            'distancesMap': clone(distancesMap)
+        }
+    )
     while (openNodes.size() > 0) {
         // visit node with lowest distance
         var node = openNodes.pop();
-
-        console.log("content " + JSON.stringify(openNodes.content));
-        states.push(
-            { 
-                'curNode': node.id, 
-                'visited': new Set(closedNodes), 
-                'heap': clone(openNodes.content), 
-                'distancesMap': clone(distancesMap) 
-            }
-        )
 
         closedNodes.add(node.id);
 
@@ -40,17 +38,19 @@ function dijkstra(adjacencyList, src) {
                 }
             }
         }
+
+
+        states.push(
+            {
+                'curNode': node.id,
+                'visited': new Set(closedNodes),
+                'heap': clone(openNodes.content),
+                'distancesMap': clone(distancesMap)
+            }
+        )
     }
 
-    // add the final state when we are done
-    states.push(
-        { 
-            'curNode': undefined, 
-            'visited': new Set(closedNodes), 
-            'heap': clone(openNodes.content), 
-            'distancesMap': clone(distancesMap) 
-        }
-    )
+
     return states;
 }
 
