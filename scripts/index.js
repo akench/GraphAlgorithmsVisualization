@@ -19,7 +19,6 @@ function renderGraph() {
 }
 
 
-
 // run the DFS algorithm with the specified input
 function runDFS() {
     var start = document.getElementById("start_node_dfs").value;
