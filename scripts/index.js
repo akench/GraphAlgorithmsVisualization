@@ -18,6 +18,12 @@ function renderGraph() {
     update(d3Json.links, d3Json.nodes);
 }
 
+function showRandomGraph() {
+    const input = getRandomGraphInput();
+    document.getElementById("graph-input").value = input;
+    renderGraph();
+}
+
 
 // run the DFS algorithm with the specified input
 function runDFS() {
