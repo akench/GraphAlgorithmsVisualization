@@ -14,6 +14,8 @@ function bfs(adjacencyList, src) {
         const node = queue.shift();
         seen.add(node);
 
+        var log = [`Visited ${node}`];
+
         // javascript will throw an error trying if the node has no neighbors
         if (adjacencyList.hasOwnProperty(node)) {
             for (var neighborEdge of adjacencyList[node]) {
@@ -22,12 +24,19 @@ function bfs(adjacencyList, src) {
                 if (!visited.has(neighbor)) {
                     queue.push(neighbor);
                     visited.add(neighbor);
+                    log.push(`Added ${neighbor} to queue`);
                 }
             }
         }
 
         // make sure we push the state after queue is updated
-        states.push({ "curNode": node, "visited": new Set(seen), "queue": [...queue] });
+        states.push(
+            {
+                "curNode": node, 
+                "visited": new Set(seen), 
+                "queue": [...queue],
+                "log": log
+            });
     }
 
     return states;

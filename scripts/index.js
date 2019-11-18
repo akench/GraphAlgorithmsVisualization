@@ -99,7 +99,8 @@ function showQueue(queue) {
     if (queue) {
         // convert queue to string
         var queueStr = queue.join();
-        $("#queue").text(queueStr);
+
+        $("#queue").text(`Queue: [${queueStr}]`);
     }
 }
 
@@ -138,7 +139,6 @@ function showLog(log) {
     $("#log").text("");
     if (log) {
         var logString = log.join("\n");
-        console.log(logString);
         $("#log").text(logString);
     }
 }
