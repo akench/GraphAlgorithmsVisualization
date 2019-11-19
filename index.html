@@ -20,11 +20,11 @@
 
             <textarea id="graph-input" spellcheck="false"></textarea>
 
-
             <select id="algo-selector">
                 <option value="dfs">DFS</option>
                 <option value="bfs">BFS</option>
                 <option value="dijkstra">Dijkstra</option>
+                <option value="allPairsSP">All Pairs Shortest Path</option>
             </select>
 
             <div id="dfs" class="algo-input">
@@ -39,11 +39,15 @@
                 <input type="text" placeholder="start node" id="start_node_dijkstra">
                 <button onclick="runDijkstra()">Run Dijkstra</button>
             </div>
+            <div id="allPairsSP" class="algo-input" style="display: none;">
+                <button onclick="runAllPairsSP()">Run All Pairs Shortest Path</button>
+            </div>
         </div>
 
         <div class="column" id="algo-info-column">
             <div id="queue"></div>
             <div id="distances-table-container"></div>
+            <div id="matrix-container"></div>
             <div id="min-heap-container"></div>
             <br />
             <pre id="log"></pre>
@@ -68,6 +72,7 @@
     <script src="scripts/algos/dfs.js"></script>
     <script src="scripts/algos/bfs.js"></script>
     <script src="scripts/algos/dijkstra.js"></script>
+    <script src="scripts/algos/allPairsSP.js"></script>
     <script src="scripts/randomGraph.js"></script>
 </body>
 

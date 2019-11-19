@@ -46,7 +46,12 @@ function runDijkstra() {
     var start = document.getElementById("start_node_dijkstra").value;
 
     states = dijkstra(adjacencyList, start);
-    console.log(states);
+    stateIndex = 0;
+    updateGraphState();
+}
+
+function runAllPairsSP() {
+    states = allPairsSP(adjacencyList);
     stateIndex = 0;
     updateGraphState();
 }
@@ -57,6 +62,9 @@ function updateGraphState() {
 
     // show the queue, if applicable
     showQueue(curState.queue);
+
+    // show distance matrix, if applicable
+    showMatrix(curState.matrix);
 
     // update distances, if applicable
     showDistances(curState.distancesMap);
@@ -80,7 +88,7 @@ function updateNodeColors(curState) {
         d3.select("#" + nodePrefix + name).select("circle").style("fill", defaultNodeColor);
 
         // update visited node colors 
-        if (curState.visited.has(name)) {
+        if (curState.visited && curState.visited.has(name)) {
             d3.select("#" + nodePrefix + name).select("circle").style("fill", visitedNodeColor);
         }
 
@@ -102,6 +110,41 @@ function showQueue(queue) {
 
         $("#queue").text(`Queue: [${queueStr}]`);
     }
+}
+
+function showMatrix(mat) {
+    var container = $("#matrix-container");
+    container.empty();
+
+    if(!mat) {
+        return;
+    }
+
+    var nodesList = Object.keys(adjacencyList);
+
+    var table = $("<table>");
+
+    // add header
+    var header = $("<tr>");
+    header.append("<td></td>")
+    for(var node of nodesList) {
+        header.append(`<td><strong>${node}</strong></td>`)
+    }
+    table.append(header);
+
+
+    for(var r = 0; r < mat.length; r++) {
+        var tr = $("<tr>");
+        tr.append(`<td><strong>${nodesList[r]}</strong></td>`)
+        for(var c = 0; c < mat[r].length; c++) {
+            const val = mat[r][c] === Number.MAX_VALUE ? "∞" : mat[r][c];
+            tr.append(`<td>${val}</td>`);
+        }
+
+        table.append(tr);
+    }
+
+    container.append(table);
 }
 
 function showDistances(distancesMap) {

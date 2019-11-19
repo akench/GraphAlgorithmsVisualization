@@ -1,5 +1,4 @@
 function bfs(adjacencyList, src) {
-
     const states = [];
     const queue = [];
     queue.push(src);
